@@ -8,13 +8,47 @@
                 border: 1px black solid;
             }
         </style>
-        <script src='util.js'></script>
-        <script src='paddle.js'></script>
-        <script src='ball.js'></script>
+        <!-- 场景元素 -->
+        <script src='scene/element/entity.js'></script>
+        <script src='scene/element/background.js'></script>
+        <!-- 打砖块 -->
+        <script src='scene/element/brick/paddle.js'></script>
+        <script src='scene/element/brick/ball.js'></script>
+        <script src='scene/element/brick/brick.js'></script>
+        <!-- 愤怒的小鸟 -->
+        <script src='scene/element/bird/bird.js'></script>
+        <script src='scene/element/bird/ground.js'></script>
+        <script src='scene/element/bird/pipe.js'></script>
+        <!-- 打飞机 -->
+        <script src='scene/element/plane/attack_manager.js'></script>
+        <script src='scene/element/plane/spark.js'></script>
+        <script src='scene/element/plane/player.js'></script>
+        <script src='scene/element/plane/enemy.js'></script>
+        <script src='scene/element/plane/bullet.js'></script>
+        <!-- 场景 -->
+        <script src='scene/scene.js'></script>
+        <script src='scene/title_scene.js'></script>
+        <script src='scene/main_scene.js'></script>
+        <script src='scene/start_scene.js'></script>
+        <script src='scene/end_scene.js'></script>
+        <script src='scene/brick_scene.js'></script>
+        <script src='scene/bird_scene.js'></script>
+        <script src='scene/plane_scene.js'></script>
+        <!-- game -->
         <script src='game.js'></script>
+        <!-- config debug -->
+        <script src='debuger.js'></script>
+        <script src='util.js'></script>
+        <script src='config.js'></script>
     </head>
     <body>
         <canvas id="id-canvas" width="400" height="300"></canvas>
+        <select name="select" id='id-scene_update'>
+            <option value="brick" selected>砖块</option>
+            <option value="bird" >小鸟</option>
+            <option value="plane">飞机</option>
+        </select>
+        <div class="controler"></div>
     </body>
     <script src='main.js'></script>
 
