@@ -1,29 +1,35 @@
 
+var PLANE = "plane"
+var BIRD = "bird"
+var BRICK = "brick"
+var START = "start"
+var END = "end"
+
 var sceneConfig = {
     brick: {
         w: 400,
         h: 300,
-        cls: BrickScene,
+        sceneConstructor: BrickScene,
     },
     bird: {
         w: 400,
         h: 300,
-        cls: BirdScene,
+        sceneConstructor: BirdScene,
     },
     plane: {
         w: 500,
         h: 480,
-        cls: PlaneScene,
+        sceneConstructor: PlaneScene,
     },
     start: {
         w: 400,
         h: 300,
-        cls: StartScene,
+        sceneConstructor: StartScene,
     },
     end: {
         w: 400,
         h: 300,
-        cls: EndScene,
+        sceneConstructor: EndScene,
     },
 
 

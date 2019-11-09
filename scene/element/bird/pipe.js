@@ -33,7 +33,8 @@ class Pipes extends EntityGroup{
         below.x = above.x
         this.setPipeY(above, below)
     }
-
+    
+    // 更新管道状态
     debug() {
         for (var e of this.elements) {
             e.speed = configValue('pipe_speed')

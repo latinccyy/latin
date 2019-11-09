@@ -1,6 +1,6 @@
 class TitleScene extends Scene {
-    constructor(game) {
-        super(game)
+    constructor(game, sceneName) {
+        super(game, sceneName)
         this.setListener()
         this.background = new StaticBackground(game, 'title_bg')
         this.addElement(this.background)

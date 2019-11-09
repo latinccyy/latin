@@ -1,15 +1,18 @@
 class Scene {
-    constructor(game) {
+    constructor(game, sceneName) {
         this.game = game
         game.scene = this
         this.elements = []
+        this.sceneName = sceneName
     }
-
-
 
     update() {}
 
     draw() {}
+
+    clear() {
+        throw('必须继承 clear')
+    }
 
     setListener() {}
 
@@ -20,5 +23,6 @@ class Scene {
     removeElement(image) {
         remove(this.elements, image)
     }
+
 
 }

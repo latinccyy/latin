@@ -1,6 +1,6 @@
 class BrickScene extends MainScene{
     constructor(game) {
-        super(game)
+        super(game, BRICK)
     }
 
     init() {
@@ -125,6 +125,11 @@ class BrickScene extends MainScene{
         this.game.registerAction('ArrowRight', () => {
             this.paddle.moveRight()
         })
+    }
+
+    clear() {
+        this.game.deregisterAction('ArrowLeft')
+        this.game.deregisterAction('ArrowRight')
     }
 
 

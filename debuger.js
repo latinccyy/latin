@@ -15,7 +15,7 @@ function template(key, item) {
     return t
 }
 
-function insertConfigHtml() {
+function insertControlerHtml() {
     var div = document.querySelector('.controler')
     var keys = Object.keys(config)
     for (var k of keys) {
@@ -34,35 +34,35 @@ function bindEvents(selector, eventName, callback) {
     }
 }
 
-function bindControler() {
+function bindControlerListener() {
     bindEvents('.controler_input', 'input', function(event) {
         var input = event.target
         var v = input.value
-        config[input.id].value = v
+        var controler = config[input.id]
+        controler.value = v
         var label = input.closest('label').querySelector('.value')
         label.innerText = v
     })
 }
 
-function setControler(enable) {
-    if (enable) {
-        insertConfigHtml()
-        bindControler()
-    }
-
+// 帧率等控制模块，用于调试
+function setControler() {
+    insertControlerHtml()
+    bindControlerListener()
 }
 
+// 根据不同的游戏设置canvas大小
 function updateCanvas(sceneName) {
     var can = document.querySelector('#id-canvas')
     var w = 0
     var h = 0
-    if (sceneName == 'brick') {
+    if (sceneName == BRICK) {
         w = 400
         h = 300
-    } else if (sceneName == 'bird') {
+    } else if (sceneName == BIRD) {
         w = 400
         h = 300
-    } else if (sceneName == 'plane') {
+    } else if (sceneName == PLANE) {
         w = 500
         h = 480
     }
@@ -76,7 +76,7 @@ function updateCanvas(sceneName) {
 }
 
 function setSceneUpdater() {
-    bindEvents('#id-scene_update', 'click', function(event) {
+    bindEvents('#id-scene_update', 'change', function(event) {
         var v = event.target.value
         updateCanvas(v)
         __game.changeScene(v)
@@ -84,15 +84,19 @@ function setSceneUpdater() {
     })
 }
 
-
 function debugMode(game, enable) {
     if (!enable) {
         return
     }
+    // 设置监听器
     listenPause()
     listenLoadLevel(game)
     listenDragBall(game)
     listenEndScene(game)
+
+    // 初始化控制器，用于在运行时更新config中的变量，改变游戏状态
+    setControler()
+
 }
 
 function listenEndScene(game) {
@@ -101,7 +105,6 @@ function listenEndScene(game) {
             game.gameOver()
         }
     })
-
 }
 
 function listenLoadLevel(game) {

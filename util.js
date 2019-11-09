@@ -50,7 +50,8 @@ function loadLevel(game, n) {
 }
 
 function newScene(sceneName) {
-    var cls = sceneConfig[sceneName]['cls']
-    var s = new cls(__game)
+    var secenes = sceneConfig[sceneName]
+    var sceneConstructor = secenes['sceneConstructor']
+    var s = new sceneConstructor(__game)
     return s
 }

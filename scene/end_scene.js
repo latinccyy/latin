@@ -1,6 +1,6 @@
 class EndScene extends TitleScene{
     constructor(game) {
-        super(game)
+        super(game, END)
         this.text = '按 r 重新开始游戏'
         this.x = 150
         this.y = 150
@@ -8,8 +8,12 @@ class EndScene extends TitleScene{
 
     setListener() {
         this.game.registerAction('r', () => {
-            this.game.setMainScene()
+            this.game.startMainScene()
         })
+    }
+
+    clear() {
+        this.game.deregisterAction('r')
     }
 
 }

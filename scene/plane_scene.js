@@ -1,6 +1,6 @@
 class PlaneScene extends MainScene{
     constructor(game) {
-        super(game)
+        super(game, PLANE)
     }
 
     init() {

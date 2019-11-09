@@ -1,10 +1,10 @@
 
 
 class Game {
-    constructor(runCallback) {
+    constructor() {
         this.init()
         this.setListener()
-        this.loadImages(runCallback)
+        this.loadImages()
     }
 
     init() {
@@ -12,7 +12,7 @@ class Game {
         this.keydowns = {}
         this.images = {}
         this.scene = null
-        this.mainSceneName = 'brick'
+        this.mainSceneName = BRICK
         this.initCanvas()
     }
 
@@ -23,7 +23,7 @@ class Game {
         this.context.fillStyle = "white"
     }
 
-    loadImages(runCallback) {
+    loadImages() {
         var images = this.getImagePaths()
         var names = Object.keys(images)
         var load = 0
@@ -37,18 +37,25 @@ class Game {
                 load += 1
                 var loadAll = load == names.length
                 if (loadAll) {
-                    this.__start(runCallback)
+                    this.__start()
                 }
             }
         }
+    }
+
+    runGame() {
+        var s = new StartScene(__game)
+        __game.run()
     }
 
     getImagePaths() {
         return imageConfig
     }
 
-    __start(runCallback) {
-        runCallback()
+    __start() {
+        var s = new StartScene(this)
+        this.scene = s
+        this.run()
     }
 
     imageByName(name) {
@@ -63,7 +70,7 @@ class Game {
     }
 
     runLoop() {
-        if (!pause) {
+        if (!window.pause) {
             this.update()
         }
         this.clear()
@@ -72,14 +79,17 @@ class Game {
 
     getFps() {
         var fps = config['fps'].value
+        if (fps == 0) {
+            return 2000
+        }
         return 1000/Number(fps)
     }
 
     gameOver() {
-        this.changeScene('end')
+        this.changeScene(END)
     }
 
-    setMainScene() {
+    startMainScene() {
         this.changeScene(this.mainSceneName)
     }
 
@@ -91,7 +101,6 @@ class Game {
         window.addEventListener('keyup', event => {
             this.keydowns[event.key] = false
         })
-
     }
 
     registerAction(key, callback) {
@@ -103,9 +112,9 @@ class Game {
     }
 
     changeScene(sceneName) {
+        this.scene.clear()
         this.scene = newScene(sceneName)
     }
-
 
     update() {
         this.scene.update()

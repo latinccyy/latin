@@ -1,10 +1,9 @@
 class BirdScene extends MainScene{
     constructor(game) {
-        super(game)
+        super(game, BIRD)
     }
 
     init() {
-        this.gameOver = false
         this.background = new StaticBackground(this.game, 'static_bg')
         this.bird = new Bird(this.game, 'bird')
         this.grounds = new Grounds(this.game, 'ground')
@@ -23,47 +22,53 @@ class BirdScene extends MainScene{
 
     update() {
         if (this.bird.dead) {
-            this.DeadUpdate()
+            this.bird.update()
         } else {
-            for (var e of this.elements) {
-                e.debug()
-                e.update()
-                this.checkCollide()
-            }
+            // 正常情况下的画面更新
+            this.normalUpdate()
         }
-        this.updateGameState()
-    }
 
-    checkCollide() {
-        for (var p of this.pipes.elements) {
-            if (collide(this.bird, p)) {
-                this.bird.handleCollide()
-                // this.gameOver = true
-                return
-            }
-        }
-    }
-
-    updateGameState() {
-        var stop = this.bird.dead && !this.bird.flying
-        if (stop || !this.pipes.havePipe()) {
-            this.gameOver = true
-        }
-        if (this.gameOver) {
+        if (this.isGameOver()) {
             this.game.gameOver()
         }
     }
 
-    DeadUpdate() {
-        if (this.bird.flying) {
-            this.bird.update()
+    normalUpdate() {
+        for (var e of this.elements) {
+            // 根据调试信息更新管道状态
+            e.debug()
+
+            e.update()
+            if (this.collidePipe()) {
+                this.bird.dead = true
+            }
         }
+    }
+
+    collidePipe() {
+        for (var p of this.pipes.elements) {
+            if (collide(this.bird, p)) {
+                return true
+            }
+        }
+        return false
+    }
+
+    isGameOver() {
+        // 小鸟死了之后还要有一个死亡动画，当掉到最下面才进入结束画面
+        var fail = this.bird.dead && !this.bird.flying
+        var pass = !this.pipes.havePipe()
+        return fail || pass
     }
 
     setListener() {
         this.game.registerAction('j', () => {
             this.bird.jump()
         })
+    }
+
+    clear() {
+        this.game.deregisterAction('j')
     }
 
 }

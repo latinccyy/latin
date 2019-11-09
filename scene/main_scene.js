@@ -1,9 +1,8 @@
 class MainScene extends Scene{
-    constructor(game) {
-        super(game)
+    constructor(game, sceneName) {
+        super(game, sceneName)
         this.init()
         this.setListener()
-
     }
 
     init() {
@@ -13,7 +12,4 @@ class MainScene extends Scene{
     initElements() {
         throw('必须继承initElements')
     }
-
-
-
 }
