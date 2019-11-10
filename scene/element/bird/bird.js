@@ -1,6 +1,6 @@
 class Bird extends Entity {
-    constructor(game, name) {
-        super(game, name)
+    constructor(game) {
+        super(game, 'bird')
         this.init()
     }
 

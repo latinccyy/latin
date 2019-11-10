@@ -4,15 +4,10 @@ class Entity {
         this.scene = game.scene
         this.image = game.imageByName(name)
         this.rotation = 0
-        this.name = name
     }
 
     draw() {
         this.game.drawImage(this, this.rotation)
-    }
-
-    debug() {
-
     }
 
     disappear() {
@@ -20,6 +15,7 @@ class Entity {
     }
 }
 
+// 包含多个元素的实体，比如多个管道
 class EntityGroup {
     constructor(game) {
         this.game = game
@@ -40,9 +36,4 @@ class EntityGroup {
             e.draw()
         }
     }
-
-    debug() {
-
-    }
-
 }

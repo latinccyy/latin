@@ -7,6 +7,7 @@ var END = "end"
 
 var GROUND_Y = 280
 
+
 var sceneConfig = {
     brick: {
         w: 400,

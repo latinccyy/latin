@@ -5,9 +5,9 @@ class BirdScene extends MainScene{
 
     init() {
         this.background = new StaticBackground(this.game, 'static_bg')
-        this.bird = new Bird(this.game, 'bird')
-        this.grounds = new Grounds(this.game, 'ground')
-        this.pipes = new Pipes(this.game, 'pipe')
+        this.bird = new Bird(this.game)
+        this.grounds = new Grounds(this.game)
+        this.pipes = new Pipes(this.game)
         this.addElement(this.background)
         this.addElement(this.bird)
         this.addElement(this.grounds)
@@ -22,9 +22,9 @@ class BirdScene extends MainScene{
 
     update() {
         if (this.bird.dead) {
+            // 只有鸟在更新，其他元素不更新
             this.bird.update()
         } else {
-            // 正常情况下的画面更新
             this.normalUpdate()
         }
 
@@ -33,11 +33,9 @@ class BirdScene extends MainScene{
         }
     }
 
+    // 游戏正常进行时（游戏未结束）的画面更新
     normalUpdate() {
         for (var e of this.elements) {
-            // 根据调试信息更新管道状态
-            e.debug()
-
             e.update()
             if (this.collidePipe()) {
                 this.bird.dead = true
@@ -69,5 +67,4 @@ class BirdScene extends MainScene{
     clear() {
         this.game.deregisterAction('j')
     }
-
 }

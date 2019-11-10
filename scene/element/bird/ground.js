@@ -2,50 +2,58 @@
 class Grounds extends EntityGroup{
     constructor(game, name) {
         super(game)
-        this.init(name)
+        this.init()
     }
 
-    init(name) {
+    init() {
         this.w = 40
-        this.speed = 4
+        this.speed = 5
         this.skipCount = this.w / this.speed
-        this.elements = this.getElements(name)
+        this.elements = this.initElements()
     }
 
-    getElements(name) {
+    initElements() {
+        var sceneWidth = sceneConfig['bird'].w
+        var nGround = sceneWidth / this.w + 2
         var gs = []
-        var nGround = 11
         for (var i = 0; i < nGround; i++) {
-            // var x = i * this.w
-            var g = new Ground(this.game, name, i)
+            var g = new Ground(this.game, i)
             gs.push(g)
         }
         return gs
     }
 
     update() {
-        var o = this.offset()
-        for (var g of this.elements) {
-            g.move(o)
+        var outIndex = null
+        for (var [index, ground] of this.elements.entries()) {
+            ground.update()
+            if (ground.outOfScene()) {
+                outIndex = index
+            }
+        }
+        if (outIndex != null) {
+            this.moveToEnd(outIndex)
         }
     }
 
-    offset() {
-        var o = -this.speed
-        this.skipCount -= 1
-        if (this.skipCount == 0) {
-            this.skipCount = this.w / this.speed
-            o = this.speed * (this.skipCount - 1)
-        }
-        return o
+    // 返回画面中最右边（包括看不见的部分）的草地
+    // 实际上是元素在数组中的前一个元素
+    endOfGrounds(elementIndex) {
+        var pre = elementIndex == 0 ? this.elements.length - 1 : elementIndex - 1
+        return this.elements[pre]
     }
 
+    moveToEnd(outIndex) {
+        var out = this.elements[outIndex]
+        var end = this.endOfGrounds(outIndex)
+        out.x = end.x + end.w
+    }
 }
 
 
 class Ground extends Entity {
-    constructor(game, name, index) {
-        super(game, name)
+    constructor(game, index) {
+        super(game, 'ground')
         this.init(index)
     }
 
@@ -54,9 +62,14 @@ class Ground extends Entity {
         this.w = 40
         this.x = index * this.w
         this.y = GROUND_Y
+        this.speed = 5
     }
 
-    move(offset) {
-        this.x += offset
+    update() {
+        this.x -= this.speed
+    }
+
+    outOfScene() {
+        return this.x < -this.w
     }
 }
