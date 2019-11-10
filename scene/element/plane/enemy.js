@@ -2,18 +2,19 @@
 
 
 class Enemy extends Plane {
-    constructor(game, imgName, x) {
-        super(game, imgName, x)
+    constructor(game, x) {
+        super(game, 'enemy', x)
         this.timer = 0
         this.kind = 'enemy'
     }
 
     update() {
         this.updateTimer()
+        // 一开始
         if (this.timer > this.updateTime) {
             this.updatePosition()
             this.attack()
-            this.checkOutOfRange()
+            this.checkOutOfScene()
             this.attackStrategy.update()
         }
     }
@@ -22,8 +23,8 @@ class Enemy extends Plane {
         this.timer++
     }
 
-    checkOutOfRange() {
-        if (this.outOfRange()) {
+    checkOutOfScene() {
+        if (this.outOfScene()) {
             this.disappear()
         }
     }
@@ -34,8 +35,8 @@ class Enemy extends Plane {
 }
 
 class SubEnemy extends Enemy {
-    constructor(game, imgName, x, isTrace) {
-        super(game, imgName, x)
+    constructor(game, x, isTrace) {
+        super(game, x)
         this.init(isTrace)
     }
 
@@ -49,7 +50,7 @@ class SubEnemy extends Enemy {
         this.attackStrategy = new SubAttack(this, isTrace, 3, 8, 100)
     }
 
-    outOfRange() {
+    outOfScene() {
         return this.y > window.height
     }
 
@@ -60,8 +61,8 @@ class SubEnemy extends Enemy {
 }
 
 class Boss extends Enemy{
-    constructor(game, imgName, x, isTrace) {
-        super(game, imgName, x)
+    constructor(game, x, isTrace) {
+        super(game, x)
         this.init(isTrace)
     }
 
@@ -73,7 +74,6 @@ class Boss extends Enemy{
         this.lives = 30
         this.updateTime = 20
         this.attackStrategy = new BossAttack(this, true, 15, 15, 80)
-
     }
 
     updatePosition() {
@@ -86,7 +86,7 @@ class Boss extends Enemy{
         return this.y > this.h / 3
     }
 
-    outOfRange() {
+    outOfScene() {
         return false
     }
 

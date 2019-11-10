@@ -18,11 +18,11 @@ class Bullet extends Entity {
     update() {
         this.updatePosition()
         this.checkShot()
-        this.checkOutOfRange()
+        this.checkoutOfScene()
     }
 
-    checkOutOfRange() {
-        if (this.outOfRange()) {
+    checkoutOfScene() {
+        if (this.outOfScene()) {
             this.disappear()
         }
     }
@@ -31,7 +31,7 @@ class Bullet extends Entity {
         var targets = this.scene.getImages(this.target)
         for (var t of targets) {
             if (collide(this, t)) {
-                this.scene.craeteSpark(t)
+                this.scene.createSpark(t)
                 t.handleShot()
                 this.handleShot()
             }
@@ -66,7 +66,7 @@ class PlayerBullet extends Bullet {
         this.target = 'enemy'
     }
 
-    outOfRange() {
+    outOfScene() {
         return this.y < 0
     }
 }
@@ -77,7 +77,7 @@ class EnemyBullet extends Bullet {
         this.target = 'player'
     }
 
-    outOfRange() {
+    outOfScene() {
         return this.y >= window.height
     }
 

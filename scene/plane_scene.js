@@ -15,6 +15,14 @@ class PlaneScene extends MainScene{
         this.addEnemys()
     }
 
+    update() {
+        for (var e of this.elements) {
+            e.update()
+        }
+        this.updateAlive()
+        this.updateGameState()
+    }
+
     getImages(kind) {
         var es = []
         for (var e of this.elements) {
@@ -26,32 +34,14 @@ class PlaneScene extends MainScene{
     }
 
     addEnemys() {
-        // SubEnemy(this.game, this, 'enemy', 20, true)
-        // TODO x, y 参数
         var es = [
-            new SubEnemy(this.game, 'enemy', 20, true),
-            new SubEnemy(this.game, 'enemy', 350, true),
-            new Boss(this.game, 'enemy', 250, true),
-
+            new SubEnemy(this.game, 20, true),
+            new SubEnemy(this.game, 350, true),
+            new Boss(this.game, 250, true),
         ]
         for (var e of es) {
             this.addElement(e)
         }
-    }
-
-    draw() {
-        for (var e of this.elements) {
-            e.draw()
-        }
-    }
-
-    update() {
-        for (var e of this.elements) {
-            e.debug()
-            e.update()
-        }
-        this.updateAlive()
-        this.updateGameState()
     }
 
     updateGameState() {
@@ -67,19 +57,26 @@ class PlaneScene extends MainScene{
 
     updateAlive() {
         for (var e of this.elements) {
+            // background没有dead方法
             if (e.dead && e.dead()) {
                 this.removeElement(e)
             }
         }
     }
 
-    craeteSpark(image) {
+    createSpark(image) {
         var nSpark = 20
         for( var i = 0; i < nSpark; i++) {
             var x = image.x + image.w / 2
             var y = image.y + image.h / 2
             var s = new Spark(this.game, 'spark', x, y)
             this.addElement(s)
+        }
+    }
+
+    draw() {
+        for (var e of this.elements) {
+            e.draw()
         }
     }
 
