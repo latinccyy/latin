@@ -24,7 +24,6 @@ class Plane extends Entity {
 
 }
 
-
 class Player extends Plane {
     constructor(game, imgName) {
         super(game, 'player', 225, 430)
@@ -33,7 +32,7 @@ class Player extends Plane {
         this.speed = 25
 
         this.lives = 1000
-        this.timer = 0
+        this.timer = 60
         this.kind = 'player'
         this.attackStrategy = new PlayerAttack(this, false, 3, -40, 8)
     }

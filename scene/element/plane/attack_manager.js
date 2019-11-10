@@ -1,30 +1,27 @@
-class Attack {
+
+class AttackSystem {
     constructor(attacker, isTrace, bulletCount, bulletSpeed, cool) {
         this.game = attacker.game
         this.scene = attacker.scene
         this.attacker = attacker
         this.isTrace = isTrace
         this.timer = cool
-        this.bulletCount = bulletCount
         this.cool = cool
         this.bulletSpeed = bulletSpeed
+        this.bulletCount = bulletCount
     }
 
     update() {
-        this.updateTimer()
+        this.timer += 1
     }
 
     attack () {
+        // 不同飞机有不同的攻击条件，比如进入画面后，经过冷却，才能进行攻击
         if (this.attackState()) {
             if (this.coolOver()) {
                 this.launch()
-                this.clearCool()
             }
         }
-    }
-
-    clearCool() {
-        this.timer = 0
     }
 
     launchBullet(angle, bulletCount, isTrace, bulletName) {
@@ -35,12 +32,9 @@ class Attack {
         }
     }
 
+    // 冷却结束
     coolOver () {
-        return this.timer >= this.cool
-    }
-
-    updateTimer () {
-        this.timer += 1
+        return this.timer % this.cool == 0
     }
 
     bulletDatas(angle, bulletCount, isTrace) {
@@ -144,56 +138,46 @@ class Attack {
     }
 }
 
-class EnemyAttack extends Attack {
+class EnemyAttack extends AttackSystem {
     constructor(attacker, isTrace, bulletCount, bulletSpeed, cool) {
         super(attacker, isTrace, bulletCount, bulletSpeed, cool)
         this.target = this.scene.player
     }
-
 }
 
 class BossAttack extends EnemyAttack {
     constructor(boss, isTrace, bulletCount, bulletSpeed, cool) {
         super(boss, isTrace, bulletCount, bulletSpeed, cool)
+        // boss可以在冷却后的一段时间内一直攻击，而不是只能在特定timer攻击一次
+        this.attackTimer = 5
     }
 
-    getBullet(bulletName, bulletData) {
-        var b = new EnemyBullet(this.game, bulletName, bulletData)
-        return b
-    }
-
-
-    attackState() {
-        return this.attacker.stopMove()
-    }
-
+    // 冷却后，enemyBullet只能发射一次，bossBullet可以一直发射
     launch () {
-        if (this.timer % this.cool == 5) {
+        if (this.timer % this.cool == this.attackTimer) {
             this.launchBullet(30, 15, false, 'enemyBullet')
         }
         this.launchBullet(10, 3, true, 'bossBullet')
     }
 
-    clearCool() {
-        if (this.timer % this.cool == 5) {
-            this.timer = 6
-        }
-
+    attackState() {
+        return this.attacker.stopMove()
     }
 
+    // 冷却后，如果达到this.attackTimer，才会进入冷却时间，否则可以继续攻击
     coolOver () {
-        return this.timer % this.cool <= 5
-    }
-}
-
-class SubAttack extends EnemyAttack {
-    constructor(attacker, isTrace, bulletCount, bulletSpeed, cool) {
-        super(attacker, isTrace, bulletCount, bulletSpeed, cool)
+        return this.timer % this.cool <= this.attackTimer
     }
 
     getBullet(bulletName, bulletData) {
-        var b = new EnemyBullet(this.game, bulletName, bulletData)
+        var b = new EnemyBullet(this.game, this.target, bulletName, bulletData)
         return b
+    }
+}
+
+class GeneralAttack extends EnemyAttack {
+    constructor(attacker, isTrace, bulletCount, bulletSpeed, cool) {
+        super(attacker, isTrace, bulletCount, bulletSpeed, cool)
     }
 
     launch() {
@@ -201,22 +185,21 @@ class SubAttack extends EnemyAttack {
     }
 
     attackState() {
-        // 出现在画面中，且未离开画面
+        // 出现在画面中，且未离开画面，则进入攻击状态
         var leaveScene = this.attacker.y > window.height - this.attacker.h * 2
         var appear = this.attacker.y > 0
         return appear && !leaveScene
     }
 
+    getBullet(bulletName, bulletData) {
+        var b = new EnemyBullet(this.game, this.target, bulletName, bulletData)
+        return b
+    }
 }
 
-class PlayerAttack extends Attack {
+class PlayerAttack extends AttackSystem {
     constructor(attacker, isTrace, bulletCount, bulletSpeed, cool) {
         super(attacker, isTrace, bulletCount, bulletSpeed, cool)
-    }
-
-    getBullet(bulletName, bulletData) {
-        var b = new PlayerBullet(this.game, bulletName, bulletData)
-        return b
     }
 
     launch() {
@@ -227,4 +210,8 @@ class PlayerAttack extends Attack {
         return true
     }
 
+    getBullet(bulletName, bulletData) {
+        var b = new PlayerBullet(this.game, bulletName, bulletData)
+        return b
+    }
 }

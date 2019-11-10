@@ -18,17 +18,13 @@ class Bullet extends Entity {
     update() {
         this.updatePosition()
         this.checkShot()
-        this.checkoutOfScene()
-    }
-
-    checkoutOfScene() {
-        if (this.outOfScene()) {
+        if (this.outOfScene() || this.dead()) {
             this.disappear()
         }
     }
 
     checkShot() {
-        var targets = this.scene.getImages(this.target)
+        var targets = this.getTargets()
         for (var t of targets) {
             if (collide(this, t)) {
                 this.scene.createSpark(t)
@@ -54,8 +50,6 @@ class Bullet extends Entity {
         this.x += this.xSpeed
         this.y += this.ySpeed
     }
-
-
 }
 
 class PlayerBullet extends Bullet {
@@ -63,22 +57,28 @@ class PlayerBullet extends Bullet {
         super(game, bulletName, bulletData)
         this.w = 20
         this.h = 20
-        this.target = 'enemy'
     }
 
     outOfScene() {
         return this.y < 0
     }
+
+    getTargets() {
+        return this.scene.getAllEnemys()
+    }
 }
 
 class EnemyBullet extends Bullet {
-    constructor(game, bulletName, bulletData) {
+    constructor(game, target, bulletName, bulletData) {
         super(game, bulletName, bulletData)
-        this.target = 'player'
+        this.target = target
     }
 
     outOfScene() {
         return this.y >= window.height
     }
 
+    getTargets() {
+        return [this.target]
+    }
 }

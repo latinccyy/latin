@@ -22,6 +22,8 @@ class Spark extends Entity{
         this.alive--
         this.x += this.xSpeed
         this.y += this.ySpeed
-
+        if (this.dead()) {
+            this.disappear()
+        }
     }
 }

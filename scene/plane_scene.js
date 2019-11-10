@@ -15,33 +15,22 @@ class PlaneScene extends MainScene{
         this.addEnemys()
     }
 
-    update() {
-        for (var e of this.elements) {
-            e.update()
-        }
-        this.updateAlive()
-        this.updateGameState()
-    }
-
-    getImages(kind) {
-        var es = []
-        for (var e of this.elements) {
-            if (e.kind == kind) {
-                es.push(e)
-            }
-        }
-        return es
-    }
-
     addEnemys() {
         var es = [
-            new SubEnemy(this.game, 20, true),
-            new SubEnemy(this.game, 350, true),
+            new GeneralEnemy(this.game, 20, true),
+            new GeneralEnemy(this.game, 350, true),
             new Boss(this.game, 250, true),
         ]
         for (var e of es) {
             this.addElement(e)
         }
+    }
+
+    update() {
+        for (var e of this.elements) {
+            e.update()
+        }
+        this.updateGameState()
     }
 
     updateGameState() {
@@ -51,17 +40,12 @@ class PlaneScene extends MainScene{
     }
 
     killAllEnemy() {
-        var es = this.getImages('enemy')
-        return es.length == 0
-    }
-
-    updateAlive() {
         for (var e of this.elements) {
-            // background没有dead方法
-            if (e.dead && e.dead()) {
-                this.removeElement(e)
+            if (e instanceof Enemy) {
+                return false
             }
         }
+        return true
     }
 
     createSpark(image) {
@@ -72,6 +56,16 @@ class PlaneScene extends MainScene{
             var s = new Spark(this.game, 'spark', x, y)
             this.addElement(s)
         }
+    }
+
+    getAllEnemys() {
+        var es = []
+        for (var e of this.elements) {
+            if (e instanceof Enemy) {
+                es.push(e)
+            }
+        }
+        return es
     }
 
     draw() {
