@@ -3,14 +3,16 @@ class Pipes extends EntityGroup{
     constructor(game, name) {
         super(game, name)
         this.init(name)
-
     }
 
     init(name) {
         this.speed = configValue('pipe_speed')
+        // 管道横向间距
         this.spaceX = configValue('pipe_space_x')
+        // 管道纵向间距
         this.spaceY = configValue('pipe_space_y')
         this.elements = this.getElements(name)
+        // 一列有上下两个管道
         var column = this.elements.length / 2
         this.repetition = 1 * column
     }
@@ -33,7 +35,7 @@ class Pipes extends EntityGroup{
         below.x = above.x
         this.setPipeY(above, below)
     }
-    
+
     // 更新管道状态
     debug() {
         for (var e of this.elements) {
@@ -55,7 +57,7 @@ class Pipes extends EntityGroup{
                     this.removePipe(below)
                 } else {
                     this.repetition--
-                    this.setPipeX(above, below)
+                    this.movePositionToEnd(above, below)
                     this.setPipeY(above, below)
                 }
             }
@@ -67,14 +69,16 @@ class Pipes extends EntityGroup{
         pipe.disappear()
     }
 
-    setPipeX(above, below) {
+    // 把画面最左边的管道移动到最后面，这样就可以在所有管道都过去后，接上这个管道
+    movePositionToEnd(above, below) {
         var firstCol = this.elements.indexOf(above) == 0
         var x = 0
         if (firstCol) {
-            x = window.width
+            var endPipe = this.elements[this.elements.length - 1]
+            x = endPipe.x + this.spaceX
         } else {
-            var front = this.frontPipe(above)
-            x = front.x + this.spaceX
+            var pre = this.previousPipe(above)
+            x = pre.x + this.spaceX
         }
         above.x = x
         below.x = x
@@ -83,12 +87,12 @@ class Pipes extends EntityGroup{
     setPipeY(above, below) {
         above.y = 0
         above.h = randomInt(30, 70)
-            below.h = 280 - above.h - this.spaceY
-        below.y = 280 - below.h
+        below.h = GROUND_Y - above.h - this.spaceY
+        below.y = GROUND_Y - below.h
     }
 
     // 同一行的前一个管道
-    frontPipe(pipe) {
+    previousPipe(pipe) {
         var i = this.elements.indexOf(pipe)
         var pos = i - 2
         if (pos >= 0) {
@@ -99,11 +103,11 @@ class Pipes extends EntityGroup{
         return p
     }
 
-    havePipe() {
-        return this.elements.length > 0
+    passAllPipe() {
+        return this.elements.length <= 0
     }
-
 }
+
 class Pipe extends Entity {
     constructor(game, name, flipY) {
         super(game, name)

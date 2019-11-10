@@ -1,3 +1,4 @@
+
 class Grounds extends EntityGroup{
     constructor(game, name) {
         super(game)
@@ -22,12 +23,10 @@ class Grounds extends EntityGroup{
         return gs
     }
 
-
     update() {
         var o = this.offset()
         for (var g of this.elements) {
             g.move(o)
-
         }
     }
 
@@ -54,7 +53,7 @@ class Ground extends Entity {
         this.h = 20
         this.w = 40
         this.x = index * this.w
-        this.y = 280
+        this.y = GROUND_Y
     }
 
     move(offset) {

@@ -9,15 +9,13 @@ class Bird extends Entity {
         this.y = 0
         this.h = 40
         this.w = 40
-        // 只要小鸟没有掉到最下面，都算是在飞
-        this.flying = true
         this.dropSpeed = 5
         this.jumpSpeed = -10
         this.dead = false
     }
 
     update() {
-        if (this.flying) {
+        if (!this.touchBottom()) {
             this.drop()
         }
     }
@@ -25,10 +23,7 @@ class Bird extends Entity {
     drop() {
         // 调整角度使头向下
         this.rotation = 45
-        this.flying = this.y < window.height - this.h
-        if (this.flying) {
-            this.y += this.dropSpeed
-        }
+        this.y += this.dropSpeed
     }
 
     jump() {
@@ -43,5 +38,7 @@ class Bird extends Entity {
         }
     }
 
-
+    touchBottom() {
+        return this.y >= window.height - this.h
+    }
 }

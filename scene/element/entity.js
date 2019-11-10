@@ -18,8 +18,6 @@ class Entity {
     disappear() {
         this.scene.removeElement(this)
     }
-
-
 }
 
 class EntityGroup {

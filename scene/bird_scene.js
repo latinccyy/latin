@@ -56,9 +56,8 @@ class BirdScene extends MainScene{
 
     isGameOver() {
         // 小鸟死了之后还要有一个死亡动画，当掉到最下面才进入结束画面
-        var fail = this.bird.dead && !this.bird.flying
-        var pass = !this.pipes.havePipe()
-        return fail || pass
+        var fail = this.bird.dead && this.bird.touchBottom()
+        return fail || this.pipes.passAllPipe()
     }
 
     setListener() {
