@@ -53,7 +53,7 @@ class PlaneScene extends MainScene{
         for( var i = 0; i < nSpark; i++) {
             var x = image.x + image.w / 2
             var y = image.y + image.h / 2
-            var s = new Spark(this.game, 'spark', x, y)
+            var s = new Spark(this.game, x, y)
             this.addElement(s)
         }
     }

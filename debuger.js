@@ -1,54 +1,12 @@
 
 
-function template(key, item) {
-    var t = `
-        <div>
-            <label>
-                <input class='controler_input' type="range"
-                     id='${key}' value='${item.value}'
-                     max='${item.max}'>
-                ${item.comment}:
-                <span class='value'>${item.value}</span>
-            </label>
-        </div>
-    `
-    return t
-}
-
-function insertControlerHtml() {
-    var div = document.querySelector('.controler')
-    var keys = Object.keys(config)
-    for (var k of keys) {
-        var item = config[k]
-        var html = template(k, item)
-        div.insertAdjacentHTML('beforeend', html)
-    }
-}
-
-function bindEvents(selector, eventName, callback) {
-    var es = document.querySelectorAll(selector)
-    for (let e of es) {
-        e.addEventListener(eventName, function(event) {
-            callback(event)
-        })
-    }
-}
-
-function bindControlerListener() {
-    bindEvents('.controler_input', 'input', function(event) {
-        var input = event.target
-        var v = input.value
-        var controler = config[input.id]
-        controler.value = v
-        var label = input.closest('label').querySelector('.value')
-        label.innerText = v
+function InitSceneSelecter() {
+    bindEvents('#id-scene_update', 'change', function(event) {
+        var v = event.target.value
+        updateCanvas(v)
+        __game.changeScene(v)
+        __game.mainSceneName = v
     })
-}
-
-// 帧率等控制模块，用于调试
-function setControler() {
-    insertControlerHtml()
-    bindControlerListener()
 }
 
 // 根据不同的游戏设置canvas大小
@@ -75,15 +33,6 @@ function updateCanvas(sceneName) {
     window.height = h
 }
 
-function setSceneUpdater() {
-    bindEvents('#id-scene_update', 'change', function(event) {
-        var v = event.target.value
-        updateCanvas(v)
-        __game.changeScene(v)
-        __game.mainSceneName = v
-    })
-}
-
 function debugMode(game, enable) {
     if (!enable) {
         return
@@ -94,9 +43,8 @@ function debugMode(game, enable) {
     listenDragBall(game)
     listenEndScene(game)
 
-    // 初始化控制器，用于在运行时更新config中的变量，改变游戏状态
-    setControler()
-
+    // 用于在运行时更新config中的变量，改变游戏状态
+    InitControler()
 }
 
 function listenEndScene(game) {
@@ -155,4 +103,55 @@ function listenDragBall(game) {
     window.addEventListener('mouseup', function(event) {
         canMove = false
     })
+}
+
+// 帧率等控制模块，用于调试
+function InitControler() {
+    insertControlerHtml()
+    bindControlerListener()
+}
+
+function template(key, item) {
+    var t = `
+        <div>
+            <label>
+                <input class='controler_input' type="range"
+                     id='${key}' value='${item.value}'
+                     max='${item.max}'>
+                ${item.comment}:
+                <span class='value'>${item.value}</span>
+            </label>
+        </div>
+    `
+    return t
+}
+
+function insertControlerHtml() {
+    var div = document.querySelector('.controler')
+    var keys = Object.keys(config)
+    for (var k of keys) {
+        var item = config[k]
+        var html = template(k, item)
+        div.insertAdjacentHTML('beforeend', html)
+    }
+}
+
+function bindControlerListener() {
+    bindEvents('.controler_input', 'input', function(event) {
+        var input = event.target
+        var v = input.value
+        var controler = config[input.id]
+        controler.value = v
+        var label = input.closest('label').querySelector('.value')
+        label.innerText = v
+    })
+}
+
+function bindEvents(selector, eventName, callback) {
+    var es = document.querySelectorAll(selector)
+    for (let e of es) {
+        e.addEventListener(eventName, function(event) {
+            callback(event)
+        })
+    }
 }

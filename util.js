@@ -2,13 +2,11 @@
 
 var log = console.log.bind(console)
 
-function randomInt(min, max) {
-    var r = Math.random() * (max - min + 1)
-    return Math.floor(r) + min;
-}
-
-function random(min, max) {
-    return Math.random() * (max - min) + min;
+function newScene(sceneName) {
+    var secenes = sceneConfig[sceneName]
+    var sceneConstructor = secenes['sceneConstructor']
+    var s = new sceneConstructor(__game)
+    return s
 }
 
 function imageFromPath(path) {
@@ -49,9 +47,11 @@ function loadLevel(game, n) {
     return bricks
 }
 
-function newScene(sceneName) {
-    var secenes = sceneConfig[sceneName]
-    var sceneConstructor = secenes['sceneConstructor']
-    var s = new sceneConstructor(__game)
-    return s
+function randomInt(min, max) {
+    var r = Math.random() * (max - min + 1)
+    return Math.floor(r) + min;
+}
+
+function random(min, max) {
+    return Math.random() * (max - min) + min;
 }

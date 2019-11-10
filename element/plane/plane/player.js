@@ -1,28 +1,3 @@
-class Plane extends Entity {
-    constructor(game, imgName, x, y) {
-        super(game, imgName)
-        this.x = x
-        this.y = y
-    }
-
-    handleShot() {
-        this.lives--
-    }
-
-    dead() {
-        return this.lives < 1
-    }
-
-    attack() {
-        this.attackStrategy.attack()
-    }
-
-    update() {
-        throw('必须继承update')
-    }
-
-
-}
 
 class Player extends Plane {
     constructor(game, imgName) {
@@ -33,8 +8,7 @@ class Player extends Plane {
 
         this.lives = 1000
         this.timer = 60
-        this.kind = 'player'
-        this.attackStrategy = new PlayerAttack(this, false, 3, -40, 8)
+        this.attackStrategy = new PlayerAttackSystem(this, false, 3, -40, 8)
     }
 
     update() {

@@ -1,8 +1,7 @@
 
 class Enemy extends Plane {
-    constructor(game, x) {
-        super(game, 'enemy', x)
-        this.kind = 'enemy'
+    constructor(game, name, x) {
+        super(game, name, x)
     }
 
     update() {
@@ -21,7 +20,7 @@ class Enemy extends Plane {
 
 class GeneralEnemy extends Enemy {
     constructor(game, x, isTrace) {
-        super(game, x)
+        super(game, 'enemy', x)
         this.init(isTrace)
     }
 
@@ -31,7 +30,7 @@ class GeneralEnemy extends Enemy {
         this.y = -this.h
         this.lives = 10
         this.ySpeed = 1
-        this.attackStrategy = new GeneralAttack(this, isTrace, 3, 8, 100)
+        this.attackStrategy = new GeneralAttackSystem(this, isTrace, 3, 8, 100)
     }
 
     outOfScene() {
@@ -46,7 +45,7 @@ class GeneralEnemy extends Enemy {
 
 class Boss extends Enemy{
     constructor(game, x, isTrace) {
-        super(game, x)
+        super(game, 'boss', x)
         this.init(isTrace)
     }
 
@@ -56,7 +55,7 @@ class Boss extends Enemy{
         this.y = -this.h
         this.ySpeed = 1
         this.lives = 100
-        this.attackStrategy = new BossAttack(this, true, null, 15, 80)
+        this.attackStrategy = new BossAttackSystem(this, true, null, 15, 80)
     }
 
     updatePosition() {

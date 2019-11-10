@@ -1,3 +1,4 @@
+// 游戏场景
 class MainScene extends Scene{
     constructor(game, sceneName) {
         super(game, sceneName)
